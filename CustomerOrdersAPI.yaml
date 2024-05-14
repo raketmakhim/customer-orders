@@ -1,0 +1,101 @@
+openapi: 3.0.0
+info:
+  title: Customer Orders API
+  version: 1.0.0
+paths:
+  /customers:
+    get:
+      summary: Retrieve data for all customers and their orders
+      tags:
+      - Customer Orders
+      parameters:
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [active, archived]
+          description: Filter customers by status (optional)
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomerWithOrders'
+  /customers/{customer_id}:
+    get:
+      summary: Retrieve data for a single customer and their orders using the customer ID
+      tags:
+      - Customer Orders
+      parameters:
+        - in: path
+          name: customer_id
+          required: true
+          schema:
+            type: integer
+          description: ID of the customer to retrieve data for
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerWithOrders'
+components:
+  schemas:
+    Customer:
+      type: object
+      properties:
+        customer_id:
+          type: integer
+          example: 1
+        firstname:
+          type: string
+          example: Troy
+        surname:
+          type: string
+          example: Suarez
+        email:
+          type: string
+          format: email
+          example: lorem@hotmail.couk
+        address:
+          type: string
+          example: "Ap #360-3538 Montes, Ave"
+        zip_code:
+          type: integer
+          example: 224574
+        region:
+          type: string
+          example: Carinthia
+        status:
+          type: string
+          enum: [active, archived]
+          example: active
+    Order:
+      type: object
+      properties:
+        order_id:
+          type: integer
+          example: 1
+        date:
+          type: string
+          format: date
+          example: "2020-06-22"
+        customer_id:
+          type: integer
+          example: 5
+        amount:
+          type: number
+          example: 451.69
+    CustomerWithOrders:
+      allOf:
+        - $ref: '#/components/schemas/Customer'
+        - type: object
+          properties:
+            orders:
+              type: array
+              items:
+                $ref: '#/components/schemas/Order'
