@@ -62,7 +62,7 @@ import java.util.stream.Collectors;
 
         public CustomerOrdersDto mapToCustomerOrdersDto(Customer customer, List<Order> orders) {
 
-            logger.info("Mapping customer to DTO.");
+            logger.info("Mapping customer to DTO for customerId: {} , firstnmae : {}, surname: {}", customer.getCustomerId(), customer.getFirstname(), customer.getSurname());
             List<Order> customerOrders = orders.stream()
                     .filter(order -> order.getCustomerId().equals(customer.getCustomerId()))
                     .collect(Collectors.toList());
